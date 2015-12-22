@@ -8,7 +8,7 @@
 
 #import "C4QCatFactsDetailViewController.h"
 
-#define CAT_GIF_URL @"http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=dc6zaTOxFJmzC";
+#define CAT_GIF_URL @"http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=dc6zaTOxFJmzC"
 
 @interface C4QCatFactsDetailViewController ()
 
@@ -18,22 +18,36 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.chosenCatLabel.text = self.chosenCatFact;
+    
+    self.randomCatImage.clipsToBounds = YES;
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    [manager GET:@"http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=dc6zaTOxFJmzC"
+      parameters:nil
+        progress:nil
+         success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+             
+             NSArray *data = responseObject[@"data"];
+             
+             int randomNumber = (arc4random() % data.count) + 1;
+             
+             NSString *imageURLString = data[randomNumber][@"images"][@"fixed_height_still"][@"url"];
+             
+             NSURL *imageURL = [NSURL URLWithString:imageURLString];
+             
+             NSData *imageData = [NSData dataWithContentsOfURL:imageURL];
+             
+             UIImage *image = [UIImage imageWithData:imageData];
+             
+             [self.randomCatImage setImage:image];
+             
+         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+             NSLog(@"Error: %@", error);
+         }];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -7,7 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AFNetworking/AFNetworking.h>
+#import "C4QSavedCatFactsTableViewController.h"
+#import "C4QCatFactsTableViewController.h"
+#import "C4QCatFactsTableViewCell.h"
 
 @interface C4QCatFactsDetailViewController : UIViewController
+
+@property (nonatomic) NSString *chosenCatFact;
+
+@property (weak, nonatomic) IBOutlet UIImageView *randomCatImage;
+
+@property (weak, nonatomic) IBOutlet UILabel *chosenCatLabel;
 
 @end
